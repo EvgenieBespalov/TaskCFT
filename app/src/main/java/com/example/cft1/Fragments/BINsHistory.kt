@@ -86,60 +86,16 @@ class HistoryOfLookUp() : Fragment() {
     fun getData(): MutableList<BINInfoModel>{
         val cursor = db?.setData()
         var binInfoList = mutableListOf<BINInfoModel>()
-        lateinit var binInfo: BINInfoModel
-        lateinit var bank: Bank
-        lateinit var country: Country
-        lateinit var number: Number
 
-        cursor!!.moveToFirst()
+        if (cursor?.count ?: 0 > 0)
+        {
+            lateinit var binInfo: BINInfoModel
+            lateinit var bank: Bank
+            lateinit var country: Country
+            lateinit var number: Number
 
-        bank = Bank(
-            cursor.getString(cursor.getColumnIndex(DBProvider.NAME_BANK_COL)),
-            cursor.getString(cursor.getColumnIndex(DBProvider.URL_COL)),
-            cursor.getString(cursor.getColumnIndex(DBProvider.PHONE_COL)),
-            cursor.getString(cursor.getColumnIndex(DBProvider.CITY_COL))
-        )
+            cursor!!.moveToFirst()
 
-        country = Country(
-            cursor.getString(cursor.getColumnIndex(DBProvider.NUMERIC_COL)),
-            cursor.getString(cursor.getColumnIndex(DBProvider.ALPHA2_COL)),
-            cursor.getString(cursor.getColumnIndex(DBProvider.NAME_COUNTRY_COL)),
-            cursor.getString(cursor.getColumnIndex(DBProvider.EMOJI_COL)),
-            cursor.getString(cursor.getColumnIndex(DBProvider.CURRENCY_COL)),
-            cursor.getInt(cursor.getColumnIndex(DBProvider.LATITUDE_COL)),
-            cursor.getInt(cursor.getColumnIndex(DBProvider.LONGITUDE_COL))
-        )
-
-        val luhn = when (cursor.getInt(cursor.getColumnIndex(DBProvider.LUHN_COL))){
-            1 -> true
-            -1 -> false
-            else -> null
-        }
-        number = Number(
-            cursor.getInt(cursor.getColumnIndex(DBProvider.LENGTH_COL)),
-            luhn
-        )
-
-        val prepaid = when (cursor.getInt(cursor.getColumnIndex(DBProvider.SCHEME_COL))){
-            1 -> true
-            -1 -> false
-            else -> null
-        }
-        binInfo = BINInfoModel(
-            cursor.getString(cursor.getColumnIndex(DBProvider.BIN_COl)),
-            cursor.getString(cursor.getColumnIndex(DBProvider.SCHEME_COL)),
-            number,
-            cursor.getString(cursor.getColumnIndex(DBProvider.TYPE_COL)),
-            cursor.getString(cursor.getColumnIndex(DBProvider.BRAND_COL)),
-            prepaid,
-            country,
-            bank
-        )
-
-        binInfoList.add(binInfo)
-
-        // перемещение курсора в следующую позицию и добавление значений
-        while(cursor.moveToNext()){
             bank = Bank(
                 cursor.getString(cursor.getColumnIndex(DBProvider.NAME_BANK_COL)),
                 cursor.getString(cursor.getColumnIndex(DBProvider.URL_COL)),
@@ -184,12 +140,61 @@ class HistoryOfLookUp() : Fragment() {
             )
 
             binInfoList.add(binInfo)
+
+            // перемещение курсора в следующую позицию и добавление значений
+            while(cursor.moveToNext()){
+                bank = Bank(
+                    cursor.getString(cursor.getColumnIndex(DBProvider.NAME_BANK_COL)),
+                    cursor.getString(cursor.getColumnIndex(DBProvider.URL_COL)),
+                    cursor.getString(cursor.getColumnIndex(DBProvider.PHONE_COL)),
+                    cursor.getString(cursor.getColumnIndex(DBProvider.CITY_COL))
+                )
+
+                country = Country(
+                    cursor.getString(cursor.getColumnIndex(DBProvider.NUMERIC_COL)),
+                    cursor.getString(cursor.getColumnIndex(DBProvider.ALPHA2_COL)),
+                    cursor.getString(cursor.getColumnIndex(DBProvider.NAME_COUNTRY_COL)),
+                    cursor.getString(cursor.getColumnIndex(DBProvider.EMOJI_COL)),
+                    cursor.getString(cursor.getColumnIndex(DBProvider.CURRENCY_COL)),
+                    cursor.getInt(cursor.getColumnIndex(DBProvider.LATITUDE_COL)),
+                    cursor.getInt(cursor.getColumnIndex(DBProvider.LONGITUDE_COL))
+                )
+
+                val luhn = when (cursor.getInt(cursor.getColumnIndex(DBProvider.LUHN_COL))){
+                    1 -> true
+                    -1 -> false
+                    else -> null
+                }
+                number = Number(
+                    cursor.getInt(cursor.getColumnIndex(DBProvider.LENGTH_COL)),
+                    luhn
+                )
+
+                val prepaid = when (cursor.getInt(cursor.getColumnIndex(DBProvider.SCHEME_COL))){
+                    1 -> true
+                    -1 -> false
+                    else -> null
+                }
+                binInfo = BINInfoModel(
+                    cursor.getString(cursor.getColumnIndex(DBProvider.BIN_COl)),
+                    cursor.getString(cursor.getColumnIndex(DBProvider.SCHEME_COL)),
+                    number,
+                    cursor.getString(cursor.getColumnIndex(DBProvider.TYPE_COL)),
+                    cursor.getString(cursor.getColumnIndex(DBProvider.BRAND_COL)),
+                    prepaid,
+                    country,
+                    bank
+                )
+
+                binInfoList.add(binInfo)
+            }
+
+            binInfoList.reverse()
         }
 
         // наконец мы закрываем наш курсор
-        cursor.close()
+        cursor?.close()
 
-        binInfoList.reverse()
 
         return binInfoList
     }
