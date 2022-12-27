@@ -4,7 +4,7 @@ plugins {
 
     id 'kotlin-android'
     id 'kotlinx-serialization'
-    id 'androidx.navigation.safeargs.kotlin'
+//    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -54,5 +54,5 @@ dependencies {
 
     implementation "androidx.viewpager2:viewpager2:1.0.0-alpha01"
 
-    apply plugin: "androidx.navigation.safeargs.kotlin"
+//    apply plugin: "androidx.navigation.safeargs.kotlin"
 }
