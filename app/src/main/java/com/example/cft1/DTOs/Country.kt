@@ -1,0 +1,13 @@
+package com.example.cft1.DTOs
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Country(
+    var numeric: String? = null,
+    var alpha2: String? = null,
+    var name: String? = null,
+    var emoji: String? = null,
+    var currency: String? = null,
+    var latitude: Int? = null,
+    var longitude: Int? = null)

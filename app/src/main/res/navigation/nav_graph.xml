@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/lookUpBin">
+
+    <fragment
+        android:id="@+id/lookUpBin"
+        android:name="com.example.cft1.Fragments.LookUpBin"
+        android:label="LookUpBin" >
+        <action
+            android:id="@+id/action_lookUpBin_to_historyOfLookUp"
+            app:destination="@id/historyOfLookUp" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyOfLookUp"
+        android:name="com.example.cft1.Fragments.HistoryOfLookUp"
+        android:label="HistoryOfLookUp">
+        <argument
+            android:name="myarg"
+            android:defaultValue="Hello, Android!"/>
+    </fragment>
+</navigation>
